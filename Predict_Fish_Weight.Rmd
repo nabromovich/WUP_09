@@ -1,15 +1,15 @@
 ---
 title: "Weight of Fish"
-author: "Your Name"
-date: "`r Sys.Date()`"  
-output: 
+author: "Nathan Abromovich"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
   html_document:
-    number_sections: true
-    toc: true
+    number_sections: yes
+    toc: yes
     toc_depth: 5
-
- 
-    
 ---
 
 
@@ -19,26 +19,86 @@ require(tidyverse)
 ```
 
 # Predicting Fish Weight
+```{r}
+Perch <-filter(Fish,Species=="Perch")
+Perch <-select(Perch,-Species)
+```
+
+
 
 
 ## Perch
 
 
 ### Best Models
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Perch,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
 
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+```{r}
+MODLPerch <- lm(Weight~ .-Weight-Length1-Length2-Length3 ,data=Perch)
+summary.lm(MODLPerch)
+```
 ### Best Two regressor model
-
+The model that uses Height and Width.  When using this model we get a adjusted R-squared of 0.94 
 
 ## Pike
-
+```{r}
+Pike <- filter (Fish,Species=="Pike")
+Pike <-select(Pike,-Species)
+```
 ### Best Models
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Pike,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
 
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+
+```
 ### Best Two regressor model
-
+The best model for the Pike is the model that contains Length 1 and Length 2. 
 ## Roach
-
+```{r}
+Roach <- filter (Fish,Species=="Roach")
+Roach <-select(Roach,-Species)
+```
 ### Best Models
+```{r}
+library(leaps)
+regsubsets.out <-
+    regsubsets(Weight ~ .,
+               data = Roach,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
 
+summary.out <- summary(regsubsets.out)
+as.data.frame(summary.out$outmat)
+library(car)
+subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+
+```
 ### Best Two regressor model
-
+For the Roach fish the model that contains the Length 3 and Width data was the best model to use. 
 ## Final Summary Statements
