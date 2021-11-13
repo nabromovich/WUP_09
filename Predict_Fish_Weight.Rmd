@@ -19,11 +19,12 @@ require(tidyverse)
 ```
 
 # Predicting Fish Weight
-```{r}
-Perch <-filter(Fish,Species=="Perch")
-Perch <-select(Perch,-Species)
-```
 
+```{r}
+Perch <-filter (Fish, Species=="Perch")
+Perch <-select(Perch,-Species)
+
+```
 
 
 
@@ -77,6 +78,8 @@ subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2
 ```
 ### Best Two regressor model
 The best model for the Pike is the model that contains Length 1 and Length 2. 
+
+
 ## Roach
 ```{r}
 Roach <- filter (Fish,Species=="Roach")
@@ -99,6 +102,14 @@ library(car)
 subsets(regsubsets.out,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
 
 ```
+```{r}
+MODLRoach <- lm(Weight~ .-Weight-Length1-Length2-Height ,data=Perch)
+summary.lm(MODLRoach)
+```
+
 ### Best Two regressor model
-For the Roach fish the model that contains the Length 3 and Width data was the best model to use. 
+For the Roach fish the model that contains the Length 3 and Width data was the best model to use.  When using the model we get a high adjusted R-squared value of 0.9346.
+
+
+
 ## Final Summary Statements
